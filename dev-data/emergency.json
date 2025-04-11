@@ -1,0 +1,42 @@
+[
+  {
+    "serviceName": "Ambulance",
+    "serviceNumber": "123",
+    "description": "Emergency ambulance service"
+  },
+  {
+    "serviceName": "Police",
+    "serviceNumber": "122",
+    "description": "Police for emergency situations"
+  },
+  {
+    "serviceName": "Firefighting",
+    "serviceNumber": "180",
+    "description": "Emergency firefighting service"
+  },
+  {
+    "serviceName": "Road Rescue",
+    "serviceNumber": "01221110000",
+    "description": "Road rescue service"
+  },
+  {
+    "serviceName": "Electricity Emergency",
+    "serviceNumber": "121",
+    "description": "Electricity emergency service"
+  },
+  {
+    "serviceName": "Sewerage Emergency",
+    "serviceNumber": "125",
+    "description": "Sewerage emergency service"
+  },
+  {
+    "serviceName": "Natural Gas Emergency",
+    "serviceNumber": "129",
+    "description": "Natural gas emergency service"
+  },
+  {
+    "serviceName": "Animal Poison Control",
+    "serviceNumber": "105",
+    "description": "Animal poison control service"
+  }
+]

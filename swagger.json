@@ -1,0 +1,783 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Kimit Eye API",
+    "description": "API for Kimit Eye project",
+    "license": {
+      "name": "Kimit Eye",
+      "email": "kimit@example.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Operations related to user"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/facebook": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Login to Kimit Eye",
+        "description": "Returns callbacks for Facebook",
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "user": {
+                  "$ref": "#/definitions/user"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Login to Kimit Eye",
+        "description": "Returns callbacks for Google",
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "user": {
+                  "$ref": "#/definitions/user"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed"
+          }
+        }
+      }
+    },
+      "/users/forgotPassword": {
+      "post": {
+        "summary": "Request a password reset",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "example": "user@example.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Password reset email sent" } }
+      }
+    },
+    "/users/resetPassword/{token}": {
+      "patch": {
+        "summary": "Reset user password",
+        "tags": ["Auth"],
+        "parameters": [{ "name": "token", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": { "type": "string" },
+                  "passwordConfirm": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Password successfully reset" } }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "Get current user profile",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "User profile retrieved successfully" } }
+      }
+    },
+    "/users/updateMe": {
+      "patch": {
+        "summary": "Update logged-in user data",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "User updated successfully" } }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users (admin only)",
+        "tags": ["Admin"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "List of users" } }
+      },
+      "post": {
+        "summary": "Create a new user (admin only)",
+        "tags": ["Admin"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "User created successfully" } }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Get a user by ID (admin only)",
+        "tags": ["Admin"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "User retrieved successfully" } }
+      },
+      "patch": {
+        "summary": "Update a user by ID (admin only)",
+        "tags": ["Admin"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "User updated successfully" } }
+      },
+      "delete": {
+        "summary": "Delete a user by ID (admin only)",
+        "tags": ["Admin"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "204": { "description": "User deleted successfully" } }
+      }
+    },
+    "/{place}": {
+  "get": {
+    "summary": "Find a place",
+    "description": "Search for a place using Foursquare API and save it in the history.",
+    "tags": ["Places"],
+    "parameters": [
+      {
+        "name": "place",
+        "in": "path",
+        "required": true,
+        "description": "Name of the place to search for",
+        "schema": {
+          "type": "string",
+          "example": "Cairo Tower"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string", "example": "Success" },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "place": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string", "example": "Cairo Tower" },
+                        "location": {
+                          "type": "object",
+                          "properties": {
+                            "region": { "type": "string", "example": "Cairo" }
+                          }
+                        },
+                        "geocodes": {
+                          "type": "object",
+                          "properties": {
+                            "main": {
+                              "type": "object",
+                              "properties": {
+                                "longitude": { "type": "number", "example": 31.2357 },
+                                "latitude": { "type": "number", "example": 30.0444 }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "imageUrl": { 
+                      "type": "string", 
+                      "example": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/default_64.png"
+                    },
+                    "context": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "No place found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string", "example": "No place found" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    ,
+    "/findplaces": {
+      "get": {
+        "tags":[
+          "Places"
+        ],
+        "summary": "Fetch data",
+        "parameters": [
+          {
+            "name": "limit",
+            "type":"integer",
+            "in": "query",
+            "required": false,
+            "description": "Number of places to be returned",
+            "example":10
+          },
+          {
+            "name": "location",
+            "type": "string",
+            "in": "query",
+            "required": false,
+            "description": "Location to search places",
+            "example": "New York"
+          },
+          {
+            "name": "place",
+            "type": "string",
+            "in": "query",
+            "required": false,
+            "description": "to determine the place",
+            "example": "Museum"
+          }
+        ],
+        "description": "Retrieve data with details about places",
+        "responses": {
+          "200": {
+            "description": "Data fetched successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Data fetched successfully"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fsq_id": {
+                            "type": "string",
+                            "example": "5c1c9f8aa6031c002cb260ff"
+                          },
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer",
+                                  "example": 10030
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "History Museum"
+                                },
+                                "short_name": {
+                                  "type": "string",
+                                  "example": "History Museum"
+                                },
+                                "plural_name": {
+                                  "type": "string",
+                                  "example": "History Museums"
+                                },
+                                "icon": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prefix": {
+                                      "type": "string",
+                                      "example": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/museum_history_"
+                                    },
+                                    "suffix": {
+                                      "type": "string",
+                                      "example": ".png"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "chains": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "closed_bucket": {
+                            "type": "string",
+                            "example": "LikelyOpen"
+                          },
+                          "distance": {
+                            "type": "integer",
+                            "example": 293335
+                          },
+                          "geocodes": {
+                            "type": "object",
+                            "properties": {
+                              "main": {
+                                "type": "object",
+                                "properties": {
+                                  "latitude": {
+                                    "type": "number",
+                                    "example": 29.518322
+                                  },
+                                  "longitude": {
+                                    "type": "number",
+                                    "example": 30.898409
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "link": {
+                            "type": "string",
+                            "example": "/v3/places/5c1c9f8aa6031c002cb260ff"
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "country": {
+                                "type": "string",
+                                "example": "EG"
+                              },
+                              "cross_street": {
+                                "type": "string",
+                                "example": ""
+                              },
+                              "formatted_address": {
+                                "type": "string",
+                                "example": ""
+                              }
+                            }
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "متحف آثار كوم أوشيم"
+                          },
+                          "related_places": {
+                            "type": "object",
+                            "example": {}
+                          },
+                          "timezone": {
+                            "type": "string",
+                            "example": "Africa/Cairo"
+                          }
+                        }
+                      }
+                    },
+                    "context": {
+                      "type": "object",
+                      "properties": {
+                        "geo_bounds": {
+                          "type": "object",
+                          "properties": {
+                            "circle": {
+                              "type": "object",
+                              "properties": {
+                                "center": {
+                                  "type": "object",
+                                  "properties": {
+                                    "latitude": {
+                                      "type": "number",
+                                      "example": 27
+                                    },
+                                    "longitude": {
+                                      "type": "number",
+                                      "example": 30
+                                    }
+                                  }
+                                },
+                                "radius": {
+                                  "type": "integer",
+                                  "example": 704505
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "/api/v1/places/{place}": {
+      "get": {
+        "tags":[
+          "Places"
+        ],
+        "summary": "ابحث عن مكان معين",
+        "description": "يبحث عن مكان باستخدام API الخاص بـ Foursquare",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "place",
+            "in": "path",
+            "required": true,
+            "description": "اسم المكان المطلوب البحث عنه",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "تم العثور على المكان بنجاح",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "place": {
+                          "type": "object",
+                          "properties": {
+                            "fsq_id": {
+                              "type": "string",
+                              "example": "4fb0f892e4b085862f70f56c"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Pyramids Plateau"
+                            },
+                            "location": {
+                              "type": "object",
+                              "properties": {
+                                "address": {
+                                  "type": "string",
+                                  "example": "Pyramids"
+                                },
+                                "formatted_address": {
+                                  "type": "string",
+                                  "example": "Pyramids, El Haram, محافظة الجيزة"
+                                }
+                              }
+                            },
+                            "imageUrl": {
+                              "type": "string",
+                              "example": "https://ss3.4sqi.net/img/categories_v2/shops/food_foodcourt_64.png"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "المكان غير موجود",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Place not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history": {
+      "get": {
+        "summary": "Get user history",
+        "description": "Retrieves the user's history.",
+        "tags": ["History"],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "example": "64a1234567890abcd" },
+                      "action": { "type": "string", "example": "Visited Place X" },
+                      "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-02-19T12:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad request" },
+          "500": { "description": "Internal server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete user history",
+        "description": "Deletes the user's history.",
+        "tags": ["History"],
+        "responses": {
+          "200": { "description": "Successfully deleted history" },
+          "400": { "description": "Bad request" },
+          "500": { "description": "Internal server error" }
+        }
+        }
+      },
+      
+  "/weather": {
+  "get": {
+    "summary": "Get Weather Data",
+    "tags": ["Weather"],
+    "security": [{ "bearerAuth": [] }],
+    "parameters": [
+      {
+        "name": "location",
+        "in": "query",
+        "required": false,
+        "description": "Location to get weather data for",
+        "schema": {
+          "type": "string",
+          "example": "Cairo"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Weather data retrieved successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "temperature": {
+                  "type": "number",
+                  "example": 28.5
+                },
+                "humidity": {
+                  "type": "number",
+                  "example": 65
+                },
+                "windSpeed": {
+                  "type": "number",
+                  "example": 12.5
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Sunny"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized - User must be logged in"
+      },
+      "500": {
+        "description": "Internal Server Error"
+      }
+    }
+  }
+}
+
+
+  },
+  "definitions": {
+    "user": {
+      "required": [
+        "name",
+        "email",
+        "password",
+        "confirmPassword"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "example": "asdf"
+        },
+        "email": {
+          "type": "string",
+          "example": "sas@wsa.io"
+        },
+        "photo": {
+          "type": "string",
+          "example": "121312312.132131.jpg"
+        },
+        "provider": {
+          "type": "string",
+          "example": "facebook"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
+        }
+      }
+    },
+    "emergcy":{
+      "properties": {
+        "serviceName":{
+          "type":"string",
+          "example":"Ambulance"
+        },
+        "serviceNumber":{
+          "type":"string",
+          "example":"123"
+        },
+        "description":{
+          "type":"string",
+          "example":"This is an emergency service"
+        }
+      }
+    },
+    "History":{
+      "properties": {
+        "userId":{
+          "type":"string",
+          "example":"4fb0f892e4b085862f70f56c"
+        },
+        "address":{
+          "type":"string",
+          "example":"Pyramids, El Haram, محافظة الجيزة"
+        },
+        "date":{
+          "type":"string",
+          "example":"2022-01-01"
+        },
+        "location":{
+          "type":"object",
+          "properties":{
+            "type":{
+              "type":"string",
+              "example":"Point"
+            },
+            "coordinates":{
+              "type":"array",
+              "items":{
+                "type":"number"
+              },
+              "example":[27.18,30.07]
+            }
+          }
+        }
+      }
+    }
+  }
+}
