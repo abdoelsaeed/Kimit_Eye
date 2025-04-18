@@ -89,3 +89,47 @@ exports.findplace = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.findplacesByCoordinates = catchAsync(async (req, res, next) => {
+  const { limit, place } = req.query;
+  const { latitude, longitude } = req.params; 
+  console.log(latitude, longitude);
+  const API_KEY = process.env.PLACES_API_KEY;
+
+  // التحقق من وجود الإحداثيات
+  if (!latitude || !longitude) {
+    return next(new AppError("You must provide latitude and longitude", 400));
+  }
+
+  const options = {
+    method: "GET",
+    url: "https://api.foursquare.com/v3/places/search",
+    headers: {
+      Accept: "application/json",
+      Authorization: API_KEY,
+    },
+    params: {
+      query: place || "museum", // قيمة افتراضية إذا لم يتم توفير اسم المكان
+      ll: `${latitude},${longitude}`, // الإحداثيات الجغرافية
+      limit: limit || 20, // عدد النتائج الافتراضي
+    },
+  };
+
+  const response = await axios.request(options);
+  const { results, context } = response.data;
+
+  // التحقق من وجود نتائج
+  if (!results || results.length === 0) {
+    return next(
+      new AppError("No places found near the provided location", 404)
+    );
+  }
+
+  return res.status(200).json({
+    message: "Data fetched successfully",
+    data: {
+      results,
+      context,
+    },
+  });
+});

@@ -967,6 +967,204 @@
       }
     }
   }
+},
+"/api/v1/places/recommendedplaces/longitude/{longitude}/latitude/{latitude}": {
+  "get": {
+    "summary": "Find places by coordinates",
+    "tags": ["Places"],
+    "description": "Fetches places near the provided latitude and longitude.",
+    "parameters": [
+      {
+        "name": "longitude",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number",
+          "example": 31.2357
+        },
+        "description": "Longitude of the location"
+      },
+      {
+        "name": "latitude",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "number",
+          "example": 30.0444
+        },
+        "description": "Latitude of the location"
+      },
+      {
+        "name": "place",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "museum"
+        },
+        "description": "Type of place to search for (e.g., museum, restaurant)"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "example": 10
+        },
+        "description": "Maximum number of results to return"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "List of places near the provided coordinates.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Data fetched successfully"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fsq_id": {
+                            "type": "string",
+                            "example": "5e130c99098c82000868ea09"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "دار الكتب المصريه"
+                          },
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer",
+                                  "example": 10027
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "example": "Museum"
+                                },
+                                "icon": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prefix": {
+                                      "type": "string",
+                                      "example": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/museum_"
+                                    },
+                                    "suffix": {
+                                      "type": "string",
+                                      "example": ".png"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "distance": {
+                            "type": "integer",
+                            "example": 1580
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "country": {
+                                "type": "string",
+                                "example": "EG"
+                              },
+                              "formatted_address": {
+                                "type": "string",
+                                "example": "Rahbet Abdin, القاهرة"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "context": {
+                      "type": "object",
+                      "properties": {
+                        "geo_bounds": {
+                          "type": "object",
+                          "properties": {
+                            "circle": {
+                              "type": "object",
+                              "properties": {
+                                "center": {
+                                  "type": "object",
+                                  "properties": {
+                                    "latitude": {
+                                      "type": "number",
+                                      "example": 30.0444
+                                    },
+                                    "longitude": {
+                                      "type": "number",
+                                      "example": 31.2357
+                                    }
+                                  }
+                                },
+                                "radius": {
+                                  "type": "integer",
+                                  "example": 1745
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request. Missing latitude or longitude.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "You must provide latitude and longitude"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "No places found near the provided location.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "No places found near the provided location"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
   },
