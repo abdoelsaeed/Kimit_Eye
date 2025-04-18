@@ -27,10 +27,10 @@
     "application/json"
   ],
   "paths": {
-    "/auth/facebook": {
+    "/api/v1/auth/facebook": {
       "get": {
         "tags": [
-          "User"
+          "Auth"
         ],
         "summary": "Login to Kimit Eye",
         "description": "Returns callbacks for Facebook",
@@ -55,10 +55,10 @@
         }
       }
     },
-    "/auth/google": {
+    "/api/v1/auth/google": {
       "get": {
         "tags": [
-          "User"
+          "Auth"
         ],
         "summary": "Login to Kimit Eye",
         "description": "Returns callbacks for Google",
@@ -82,8 +82,153 @@
           }
         }
       }
+    },"/api/v1/users/login": {
+  "post": {
+    "summary": "Log in a user",
+    "tags": ["Auth"],
+    "description": "Logs in a user by verifying their email and password, and returns a token.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "example": "johndoe@example.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "password123"
+              }
+            },
+            "required": ["email", "password"]
+          }
+        }
+      }
     },
-      "/users/forgotPassword": {
+    "responses": {
+      "200": {
+        "description": "User logged in successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/definitions/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request. Email or password not provided.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "fail"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "please provide email and password!"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized. Incorrect email or password.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "fail"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Incorrect email or password"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},"/api/v1/users/logout": {
+  "get": {
+    "summary": "Log out a user",
+    "tags": ["User"],
+    "description": "Logs out the currently authenticated user by destroying the session and clearing cookies.",
+    "responses": {
+      "200": {
+        "description": "User logged out successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Logged out successfully!"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error. Could not log out the user.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "An error occurred while logging out."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+      "/api/v1/users/forgotPassword": {
       "post": {
         "summary": "Request a password reset",
         "tags": ["Auth"],
@@ -103,7 +248,7 @@
         "responses": { "200": { "description": "Password reset email sent" } }
       }
     },
-    "/users/resetPassword/{token}": {
+    "/api/v1/users/resetPassword/{token}": {
       "patch": {
         "summary": "Reset user password",
         "tags": ["Auth"],
@@ -125,15 +270,146 @@
         "responses": { "200": { "description": "Password successfully reset" } }
       }
     },
-    "/users/me": {
+    "/api/v1/users/updateMyPassword": {
+  "patch": {
+    "tags": ["Auth"],
+    "summary": "Update password",
+    "description": "Update the logged-in user's password after verifying the current one.",
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["password", "newPassword", "confirmNewPassword"],
+            "properties": {
+              "password": {
+                "type": "string",
+                "example": "oldPassword123"
+              },
+              "newPassword": {
+                "type": "string",
+                "example": "newPassword456"
+              },
+              "confirmNewPassword": {
+                "type": "string",
+                "example": "newPassword456"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Password updated successfully."
+      },
+      "401": {
+        "description": "Current password is incorrect."
+      }
+    }
+  }
+},
+
+    "/api/v1/users/me": {
       "get": {
         "summary": "Get current user profile",
         "tags": ["User"],
         "security": [{ "bearerAuth": [] }],
         "responses": { "200": { "description": "User profile retrieved successfully" } }
       }
+    },"/api/v1/users/signup": {
+  "post": {
+    "summary": "Sign up a new user",
+    "tags": ["User"],
+    "description": "Creates a new user account and returns a token.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "example": "johndoe@example.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "password123"
+              },
+              "passwordConfirm": {
+                "type": "string",
+                "example": "password123"
+              }
+            },
+            "required": ["name", "email", "password", "passwordConfirm"]
+          }
+        }
+      }
     },
-    "/users/updateMe": {
+    "responses": {
+      "201": {
+        "description": "User created successfully.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/definitions/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request. Validation failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "fail"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid input data"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+},
+    "/api/v1/users/updateMe": {
       "patch": {
         "summary": "Update logged-in user data",
         "tags": ["User"],
@@ -155,7 +431,28 @@
         "responses": { "200": { "description": "User updated successfully" } }
       }
     },
-    "/users": {
+    "/api/v1/users/deleteMe": {
+  "delete": {
+    "tags": ["User"],
+    "summary": "Deactivate (soft delete) the currently authenticated user",
+    "description": "Sets the `active` field of the user to `false`, effectively deactivating the account.",
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "User account deactivated successfully. No content returned."
+      },
+      "401": {
+        "description": "Unauthorized - JWT token missing or invalid."
+      }
+    }
+  }
+},
+
+    "/api/v1/users": {
       "get": {
         "summary": "Get all users (admin only)",
         "tags": ["Admin"],
@@ -184,7 +481,7 @@
         "responses": { "201": { "description": "User created successfully" } }
       }
     },
-    "/users/{id}": {
+    "/api/v1/users/{id}": {
       "get": {
         "summary": "Get a user by ID (admin only)",
         "tags": ["Admin"],
@@ -217,90 +514,8 @@
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": { "204": { "description": "User deleted successfully" } }
       }
-    },
-    "/{place}": {
-  "get": {
-    "summary": "Find a place",
-    "description": "Search for a place using Foursquare API and save it in the history.",
-    "tags": ["Places"],
-    "parameters": [
-      {
-        "name": "place",
-        "in": "path",
-        "required": true,
-        "description": "Name of the place to search for",
-        "schema": {
-          "type": "string",
-          "example": "Cairo Tower"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Success",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": { "type": "string", "example": "Success" },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "place": {
-                      "type": "object",
-                      "properties": {
-                        "name": { "type": "string", "example": "Cairo Tower" },
-                        "location": {
-                          "type": "object",
-                          "properties": {
-                            "region": { "type": "string", "example": "Cairo" }
-                          }
-                        },
-                        "geocodes": {
-                          "type": "object",
-                          "properties": {
-                            "main": {
-                              "type": "object",
-                              "properties": {
-                                "longitude": { "type": "number", "example": 31.2357 },
-                                "latitude": { "type": "number", "example": 30.0444 }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    },
-                    "imageUrl": { 
-                      "type": "string", 
-                      "example": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/default_64.png"
-                    },
-                    "context": { "type": "object" }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "No place found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": { "type": "string", "example": "No place found" }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-    ,
-    "/findplaces": {
+    },  
+    "/api/v1/places": {
       "get": {
         "tags":[
           "Places"
@@ -595,7 +810,7 @@
         }
       }
     },
-    "/history": {
+    "/api/v1/users/history": {
       "get": {
         "summary": "Get user history",
         "description": "Retrieves the user's history.",
@@ -639,10 +854,10 @@
         }
       },
       
-  "/weather": {
+  "/api/v1/utils/weather": {
   "get": {
     "summary": "Get Weather Data",
-    "tags": ["Weather"],
+    "tags": ["Utils"],
     "security": [{ "bearerAuth": [] }],
     "parameters": [
       {
@@ -693,8 +908,66 @@
       }
     }
   }
+},
+"/api/v1/utils/emergency": {
+  "get": {
+    "summary": "Get Emergency List",
+    "tags": ["Utils"],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "description": "Fetches a list of all emergency records from the database.",
+    "responses": {
+      "200": {
+        "description": "Successfully fetched the emergency list.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Emergency list fetched successfully"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/emergcy"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "No emergency records found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "No emergency found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error"
+      }
+    }
+  }
 }
-
 
   },
   "definitions": {

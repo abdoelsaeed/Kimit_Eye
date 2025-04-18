@@ -13,7 +13,6 @@ const AppError = require("./utils/err");
 const globalErrorHandler = require('./controller/errorController');
 const morgan = require("morgan");
 const passport = require("./services/passport");
-
 app.use(cookieParser());
 app.use(
   session({
