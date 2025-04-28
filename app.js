@@ -41,10 +41,10 @@ app.use(
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/places", placesRoutes);
 app.use('/api/v1/utils',weatherRoutes);
-app.use("/Auth", authRoutes);
+app.use("/auth", authRoutes);
 app.get('/favicon.ico', (req, res) => res.status(204));
 app.all("*", (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  res.send(`Can't find ${req.originalUrl} on this server`, 404);
 });
 app.use(globalErrorHandler);
 module.exports = app;

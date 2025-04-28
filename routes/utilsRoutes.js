@@ -14,3 +14,4 @@ router.get("/emergency", authController.protect,async (req,res)=>{
 })
 });
 module.exports = router;
+

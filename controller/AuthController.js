@@ -2,7 +2,6 @@ const User = require("../model/userModel");
 const catchAsync = require('./../utils/catchAsyn');
 const jwt = require("jsonwebtoken");
 const AppError = require("./../utils/err");
-const { promisify } = require("util");
 
 
 exports.callback_Facebook = (req, res) => {
@@ -28,30 +27,8 @@ exports.callback_google = (req, res) => {
   }
 };
 
-const signtoken = id => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_COOKIE_EXPIRES_IN
-  });
-};
 
-const createSendToken = (user, statusCode, req, res) => {
-  const token = signtoken(user._id);
-  res.cookie('jwt', token, {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
-  });
-  user.password = undefined;
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user
-    }
-  });
-};
+
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -64,7 +41,6 @@ exports.restrictTo = (...roles) => {
   };
 };
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log(req.params)
   const newUser = await User.create(req.body);
   
   createSendToken(newUser, 201, req, res);
@@ -72,55 +48,48 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
 
-  // التحقق مما إذا كان المستخدم مسجل دخول بالفعل (Facebook/Google)
-  if (req.isAuthenticated()) {
-    console.log('12')
-    // تسجيل الدخول عبر Facebook
-    if (req.user.provider === "facebook") {
-      console.log("\x1b[34m%s\x1b[0m", "Logged in with Facebook");
-    }
-    // تسجيل الدخول عبر Google
-    else if (req.user.provider === "google") {
-      console.log("\x1b[31m%s\x1b[0m", "Logged in with Google");
-    }
-    req.user = req.user;
-    return next()
+  // if (req.isAuthenticated()) {
+  //   if (req.user.provider === "facebook") {
+  //     console.log("\x1b[34m%s\x1b[0m", "Logged in with Facebook");
+  //   }
+  //   else if (req.user.provider === "google") {
+  //     console.log("\x1b[31m%s\x1b[0m", "Logged in with Google");
+  //   }
+  //   req.user = req.user;
+  //   return next()
+  // }
+
+const {token} = req.query;
+  if (!token) {
+    return next(new AppError("You are not logged in ", 400));
   }
-
-  // تسجيل الدخول التقليدي (بريد إلكتروني وكلمة مرور)
-let token;
-if (
-  req.headers.authorization &&
-  req.headers.authorization.startsWith("Bearer")
-) {
-  token = req.headers.authorization.split(" ")[1];
-} else if (req.cookies.jwt) {
-  token = req.cookies.jwt;
-}
-if (!token) {
-  return next(
-    new AppError("You are not logged in! please log in to get access", 401)
-  );
-}
 //2)Verification token
-const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-//3)check if user still exists يعني مامسحش الاكونت مثلا
-const currentUser = await User.findById(decoded.id);
-if (!currentUser) {
-  return next(
-    new AppError("the user belonging to this token does not exist", 401)
-  );
-}
-//4)check if user changed password after the token was issued
-if (currentUser.changePasswordAfter(decoded.iat)) {
-  return next(
-    new AppError("Your password has changed! please login again", 401)
-  );
-}
-req.user = currentUser;
-res.locals.user = currentUser;
+try {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log("decoded:", decoded);
 
-next();
+  //3)check if user still exists يعني مامسحش الاكونت مثلا
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new AppError("the user belonging to this token does not exist", 401)
+    );
+  }
+  //4)check if user changed password after the token was issued
+  if (currentUser.changePasswordAfter(decoded.iat)) {
+    return next(
+      new AppError("Your password has changed! please login again", 401)
+    );
+  }
+  req.user = currentUser;
+  res.locals.user = currentUser;
+
+  next();
+  } 
+  catch (err) {
+    console.error("JWT verification error:", err);
+    return next(new AppError("Invalid or expired token", 401));
+  }
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -137,7 +106,18 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Incorrect email or password", 401));
   }
   //3) If everything is ok ,send token to client
-  createSendToken(user, 201, req, res);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "90d",
+  });
+  //! التوكن ل param حولوا لcookiesعايز اشيل ال
+  user.password = undefined;
+  res.status(200).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
 });
 
 
