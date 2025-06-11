@@ -1169,7 +1169,7 @@
 
   },
   "definitions": {
-    "user": {
+    "User": {
       "required": [
         "name",
         "email",
@@ -1202,7 +1202,7 @@
         }
       }
     },
-    "emergcy":{
+    "Emergcy":{
       "properties": {
         "serviceName":{
           "type":"string",

@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000", // أضف المصدر الخاص بك هنا
+    origin: "*", // أضف المصدر الخاص بك هنا
   })
 );
 

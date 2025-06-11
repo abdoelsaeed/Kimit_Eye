@@ -16,8 +16,8 @@ exports.callback_Facebook = (req, res) => {
 };
 exports.callback_google = (req, res) => {
   if (req.user) {
-    console.log(1);
-    console.log(req.user);
+    
+    
     res.json({
       message: "Authentication successful",
       user: req.user,
@@ -43,17 +43,28 @@ exports.restrictTo = (...roles) => {
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
   
-  createSendToken(newUser, 201, req, res);
+const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+  expiresIn: "90d",
+});
+  //! التوكن ل param حولوا لcookiesعايز اشيل ال
+  newUser.password = undefined;
+  res.status(200).json({
+    status: "success",
+    token,
+    data: {
+      newUser,
+    },
+  });
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
 
   // if (req.isAuthenticated()) {
   //   if (req.user.provider === "facebook") {
-  //     console.log("\x1b[34m%s\x1b[0m", "Logged in with Facebook");
+  //     
   //   }
   //   else if (req.user.provider === "google") {
-  //     console.log("\x1b[31m%s\x1b[0m", "Logged in with Google");
+  //     
   //   }
   //   req.user = req.user;
   //   return next()
@@ -66,7 +77,7 @@ const {token} = req.query;
 //2)Verification token
 try {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  console.log("decoded:", decoded);
+  
 
   //3)check if user still exists يعني مامسحش الاكونت مثلا
   const currentUser = await User.findById(decoded.id);
@@ -235,13 +246,13 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     // exports.login = async (req, res, next) => {
     //     const email = req.user.email || req.body.email;
     //     const password = req.body.password || undefined;
-    //     console.log(req.user);
+    //     
     
     //     if (!email || !password) {
     //         return next(new AppError("please provide email and password!", 400));
     //     }
     //     const user = await User.findOne({ email }).select("+password");
-    //     console.log(user)
+    //     
     //     const token = jwt.sign(
     //         { id: user._id, name: user.name, email: user.email },
     //         process.env.JWT_SECRET,

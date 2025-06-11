@@ -22,6 +22,10 @@ const historySchema = new mongoose.Schema({
       required: true,
     },
   },
+  imageUrl: {
+    type: String,
+    default: null, // يمكن أن يكون فارغًا إذا لم يكن هناك صورة
+  },
 });
 historySchema.index({ location: "2dsphere" });
 

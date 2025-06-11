@@ -20,9 +20,56 @@ exports.findplaces = catchAsync(async (req, res, next) => {
     },
   };
     const response = await axios.request(options);
-    const { results, context } = response.data;
+    let { results, context } = response.data;
+    results = await Promise.all(
+      results.map(async (place) => {
+        try {
+          // طلب صور المكان
+          const photosResponse = await axios.get(
+            `https://api.foursquare.com/v3/places/${place.fsq_id}/photos`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: API_KEY,
+              },
+            }
+          );
+
+          // معالجة الصور
+          const photos = photosResponse.data.map((photo) => ({
+            url: `${photo.prefix}original${photo.suffix}`,
+            width: photo.width,
+            height: photo.height,
+          }));
+          const {fsq_id, name, location} = place;
+          const { main } = place.geocodes;
+          return {
+            fsq_id,
+            name,
+            location,
+            main,
+            iconUrl: place.categories[0]?.icon
+              ? `${place.categories[0].icon.prefix}64${place.categories[0].icon.suffix}`
+              : null,
+            photos, // إضافة الصور
+          };
+        } catch (error) {
+          console.error(
+            `Error fetching photos for place ${place.fsq_id}:`,
+            error.message
+          );
+          return {
+            ...place,
+            iconUrl: place.categories[0]?.icon
+              ? `${place.categories[0].icon.prefix}64${place.categories[0].icon.suffix}`
+              : null,
+            photos: [], // إرجاع مصفوفة فاضية لو فيه خطأ
+          };
+        }
+      })
+    );
     // //& to get (latitude,longitude)
-    // console.log(results[0].geocodes.main);
+    // 
     return res.status(200).json({
       message: "Data fetched successfully",
       data: {
@@ -36,6 +83,7 @@ exports.findplace = catchAsync(async (req, res, next) => {
   const {id} = req.user;
   const place = req.params.place;
   if (!place) return next(new AppError("You must provide a place", 404));
+  const API_KEY = process.env.PLACES_API_KEY;
 
   const options = {
     method: "GET",
@@ -52,40 +100,78 @@ exports.findplace = catchAsync(async (req, res, next) => {
   };
 
   const response = await axios.request(options);
-  const { results, context } = response.data;
+  let { results, context } = response.data;
 
   if (!results || results.length === 0) {
     return next(new AppError("No place found", 404));
   }
+  results = await Promise.all(
+    results.map(async (place) => {
+      try {
+        // طلب صور المكان
+        const photosResponse = await axios.get(
+          `https://api.foursquare.com/v3/places/${place.fsq_id}/photos`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: API_KEY,
+            },
+          }
+        );
+
+        // معالجة الصور
+        const photos = photosResponse.data.map((photo) => ({
+          url: `${photo.prefix}original${photo.suffix}`,
+          width: photo.width,
+          height: photo.height,
+        }));
+        const { fsq_id, name, location } = place;
+        const { main } = place.geocodes;
+        
+        return {
+          fsq_id,
+          name,
+          location,
+          main,
+          iconUrl: place.categories[0]?.icon
+            ? `${place.categories[0].icon.prefix}64${place.categories[0].icon.suffix}`
+            : null,
+          photos, // إضافة الصور
+        };
+      } catch (error) {
+        console.error(
+          `Error fetching photos for place ${place.fsq_id}:`,
+          error.message
+        );
+        return {
+          ...place,
+          iconUrl: place.categories[0]?.icon
+            ? `${place.categories[0].icon.prefix}64${place.categories[0].icon.suffix}`
+            : null,
+          photos: [], // إرجاع مصفوفة فاضية لو فيه خطأ
+        };
+      }
+    })
+  );
 
   // استخراج بيانات المكان الأول في النتائج
   const placeData = results[0];
-  console.log()
+  
   await History.create({
     user: id,
     adress: placeData.location.region,
     name: placeData.name,
     location: {
       type: "Point",
-      coordinates: [
-        placeData.geocodes.main.longitude,
-        placeData.geocodes.main.latitude,
-      ], 
+      coordinates: [placeData.main.longitude, placeData.main.latitude],
     },
+    imageUrl: placeData.photos.length > 0 ? placeData.photos[0].url : null,
   });
-  // استخراج الصورة إذا كانت متاحة
-  let imageUrl = null;
-  if (placeData.categories && placeData.categories.length > 0) {
-    const icon = placeData.categories[0].icon;
-    imageUrl = `${icon.prefix}64${icon.suffix}`;
-  }
 
   return res.status(200).json({
     message: "Success",
     data: {
-      place: placeData,
-      imageUrl, // ✅ إرجاع رابط الصورة
-      context,
+      placeData,
     },
   });
 });
@@ -93,7 +179,7 @@ exports.findplace = catchAsync(async (req, res, next) => {
 exports.findplacesByCoordinates = catchAsync(async (req, res, next) => {
   const { limit, place } = req.query;
   const { latitude, longitude } = req.params; 
-  console.log(latitude, longitude);
+  
   const API_KEY = process.env.PLACES_API_KEY;
 
   // التحقق من وجود الإحداثيات
@@ -116,7 +202,7 @@ exports.findplacesByCoordinates = catchAsync(async (req, res, next) => {
   };
 
   const response = await axios.request(options);
-  const { results, context } = response.data;
+  let { results } = response.data;
 
   // التحقق من وجود نتائج
   if (!results || results.length === 0) {
@@ -124,12 +210,59 @@ exports.findplacesByCoordinates = catchAsync(async (req, res, next) => {
       new AppError("No places found near the provided location", 404)
     );
   }
+  results = await Promise.all(
+    results.map(async (place) => {
+      try {
+        // طلب صور المكان
+        const photosResponse = await axios.get(
+          `https://api.foursquare.com/v3/places/${place.fsq_id}/photos`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: API_KEY,
+            },
+          }
+        );
+
+        // معالجة الصور
+        const photos = photosResponse.data.map((photo) => ({
+          url: `${photo.prefix}original${photo.suffix}`,
+          width: photo.width,
+          height: photo.height,
+        }));
+        const { fsq_id, name, location } = place;
+        const { main } = place.geocodes;
+
+        return {
+          fsq_id,
+          name,
+          location,
+          main,
+          iconUrl: place.categories[0]?.icon
+            ? `${place.categories[0].icon.prefix}64${place.categories[0].icon.suffix}`
+            : null,
+          photos, // إضافة الصور
+        };
+      } catch (error) {
+        console.error(
+          `Error fetching photos for place ${place.fsq_id}:`,
+          error.message
+        );
+        return {
+          ...place,
+          iconUrl: place.categories[0]?.icon
+            ? `${place.categories[0].icon.prefix}64${place.categories[0].icon.suffix}`
+            : null,
+          photos: [], // إرجاع مصفوفة فاضية لو فيه خطأ
+        };
+      }
+    })
+  );
 
   return res.status(200).json({
     message: "Data fetched successfully",
     data: {
       results,
-      context,
     },
   });
 });
