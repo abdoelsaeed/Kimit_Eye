@@ -10,6 +10,9 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 
+
+router.post("/forgotpassword", authController.forgotPassword);
+router.patch("/resetpassword/:code", authController.resetPassword);
 //? Auth with Facebook
 router.get(
   "/facebook",
@@ -36,13 +39,11 @@ router.get(
 
 //for password
 
-router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+
 
 // Protect all routes after this middleware
 router.use(authController.protect);
-
-router.patch('/updatemypassword', authController.updatePassword);
+router.patch("/updatemypassword", authController.updatePassword);
 router.get('/me', userController.getMe, userController.getUserById);
 router.delete('/deleteMe', userController.deleteMe);
 router.patch('/updateMe',userController.updateMe);
@@ -57,7 +58,6 @@ router.use(authController.restrictTo('admin'));
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createUser);
 
 router
   .route('/:id')
