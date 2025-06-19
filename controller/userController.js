@@ -38,10 +38,18 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     });
   });
   
-  exports.getMe = (req, res, next) => {
-    req.params.id = req.user.id;
-    next();
-  };
+  exports.getMe = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    if (!user) return next(new AppError("User not found", 404));
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: user
+      }
+    });
+  });
+
   
   exports.deleteMe = catchAsync(async (req, res, next) => {
     await User.findByIdAndUpdate(req.user.id, {
@@ -53,12 +61,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       data: null
     });
   });
-  exports.createUser = (req, res) => {
-    res.status(500).json({
-      status: 'error',
-      message: 'This route is not yet defined!, please use /signup instead.'
-    });
-  };
+
 
   exports.getAllUsers = catchAsync(async (req, res,next) => {
     const users = await User.find();
@@ -82,7 +85,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       );
     }
     const user = await User.findById(req.params.id);
-    console.log(user);
     if (!user) {
       return next(new AppError('No user found with that ID', 404));
     }

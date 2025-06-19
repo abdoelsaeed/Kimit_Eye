@@ -15,6 +15,14 @@
     {
       "name": "User",
       "description": "Operations related to user"
+    },
+    {
+      "name": "Post",
+      "description": "Operations related to posts"
+    },
+    {
+      "name": "Chatbot",
+      "description": "Ask questions to the AI chatbot"
     }
   ],
   "schemes": [
@@ -82,53 +90,96 @@
           }
         }
       }
-    },"/api/v1/users/login": {
-  "post": {
-    "summary": "Log in a user",
-    "tags": ["Auth"],
-    "description": "Logs in a user by verifying their email and password, and returns a token.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "example": "johndoe@example.com"
-              },
-              "password": {
-                "type": "string",
-                "example": "password123"
-              }
-            },
-            "required": ["email", "password"]
-          }
-        }
-      }
     },
-    "responses": {
-      "200": {
-        "description": "User logged in successfully.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "success"
+    "/api/v1/users/login": {
+      "post": {
+        "summary": "Log in a user",
+        "tags": ["Auth"],
+        "description": "Logs in a user by verifying their email and password, and returns a token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
                 },
-                "token": {
-                  "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                },
-                "data": {
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "user": {
-                      "$ref": "#/definitions/User"
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/definitions/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Email or password not provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "please provide email and password!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Incorrect email or password.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Incorrect email or password"
                     }
                   }
                 }
@@ -136,99 +187,58 @@
             }
           }
         }
-      },
-      "400": {
-        "description": "Bad request. Email or password not provided.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "fail"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "please provide email and password!"
+      }
+    },
+    "/api/v1/users/logout": {
+      "get": {
+        "summary": "Log out a user",
+        "tags": ["User"],
+        "description": "Logs out the currently authenticated user by destroying the session and clearing cookies.",
+        "responses": {
+          "200": {
+            "description": "User logged out successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logged out successfully!"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      },
-      "401": {
-        "description": "Unauthorized. Incorrect email or password.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "fail"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Incorrect email or password"
+          },
+          "500": {
+            "description": "Internal Server Error. Could not log out the user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while logging out."
+                    }
+                  }
                 }
               }
             }
           }
         }
       }
-    }
-  }
-},"/api/v1/users/logout": {
-  "get": {
-    "summary": "Log out a user",
-    "tags": ["User"],
-    "description": "Logs out the currently authenticated user by destroying the session and clearing cookies.",
-    "responses": {
-      "200": {
-        "description": "User logged out successfully.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "success"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Logged out successfully!"
-                }
-              }
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Internal Server Error. Could not log out the user.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "error"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "An error occurred while logging out."
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-},
-      "/api/v1/users/forgotPassword": {
+    },
+    "/api/v1/users/forgotPassword": {
       "post": {
         "summary": "Request a password reset",
         "tags": ["Auth"],
@@ -271,51 +281,50 @@
       }
     },
     "/api/v1/users/updateMyPassword": {
-  "patch": {
-    "tags": ["Auth"],
-    "summary": "Update password",
-    "description": "Update the logged-in user's password after verifying the current one.",
-    "security": [
-      {
-        "bearerAuth": []
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "required": ["password", "newPassword", "confirmNewPassword"],
-            "properties": {
-              "password": {
-                "type": "string",
-                "example": "oldPassword123"
-              },
-              "newPassword": {
-                "type": "string",
-                "example": "newPassword456"
-              },
-              "confirmNewPassword": {
-                "type": "string",
-                "example": "newPassword456"
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update password",
+        "description": "Update the logged-in user's password after verifying the current one.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["password", "newPassword", "confirmNewPassword"],
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "example": "oldPassword123"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "newPassword456"
+                  },
+                  "confirmNewPassword": {
+                    "type": "string",
+                    "example": "newPassword456"
+                  }
+                }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password updated successfully."
+          },
+          "401": {
+            "description": "Current password is incorrect."
           }
         }
       }
     },
-    "responses": {
-      "200": {
-        "description": "Password updated successfully."
-      },
-      "401": {
-        "description": "Current password is incorrect."
-      }
-    }
-  }
-},
-
     "/api/v1/users/me": {
       "get": {
         "summary": "Get current user profile",
@@ -323,61 +332,84 @@
         "security": [{ "bearerAuth": [] }],
         "responses": { "200": { "description": "User profile retrieved successfully" } }
       }
-    },"/api/v1/users/signup": {
-  "post": {
-    "summary": "Sign up a new user",
-    "tags": ["User"],
-    "description": "Creates a new user account and returns a token.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "John Doe"
-              },
-              "email": {
-                "type": "string",
-                "example": "johndoe@example.com"
-              },
-              "password": {
-                "type": "string",
-                "example": "password123"
-              },
-              "passwordConfirm": {
-                "type": "string",
-                "example": "password123"
-              }
-            },
-            "required": ["name", "email", "password", "passwordConfirm"]
-          }
-        }
-      }
     },
-    "responses": {
-      "201": {
-        "description": "User created successfully.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "success"
+    "/api/v1/users/signup": {
+      "post": {
+        "summary": "Sign up a new user",
+        "tags": ["User"],
+        "description": "Creates a new user account and returns a token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  },
+                  "passwordConfirm": {
+                    "type": "string",
+                    "example": "password123"
+                  }
                 },
-                "token": {
-                  "type": "string",
-                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                },
-                "data": {
+                "required": ["name", "email", "password", "passwordConfirm"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "user": {
-                      "$ref": "#/definitions/User"
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/definitions/User"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid input data"
                     }
                   }
                 }
@@ -385,30 +417,8 @@
             }
           }
         }
-      },
-      "400": {
-        "description": "Bad request. Validation failed.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "fail"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Invalid input data"
-                }
-              }
-            }
-          }
-        }
       }
-    }
-  }
-},
+    },
     "/api/v1/users/updateMe": {
       "patch": {
         "summary": "Update logged-in user data",
@@ -432,26 +442,25 @@
       }
     },
     "/api/v1/users/deleteMe": {
-  "delete": {
-    "tags": ["User"],
-    "summary": "Deactivate (soft delete) the currently authenticated user",
-    "description": "Sets the `active` field of the user to `false`, effectively deactivating the account.",
-    "security": [
-      {
-        "bearerAuth": []
+      "delete": {
+        "tags": ["User"],
+        "summary": "Deactivate (soft delete) the currently authenticated user",
+        "description": "Sets the `active` field of the user to `false`, effectively deactivating the account.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User account deactivated successfully. No content returned."
+          },
+          "401": {
+            "description": "Unauthorized - JWT token missing or invalid."
+          }
+        }
       }
-    ],
-    "responses": {
-      "204": {
-        "description": "User account deactivated successfully. No content returned."
-      },
-      "401": {
-        "description": "Unauthorized - JWT token missing or invalid."
-      }
-    }
-  }
-},
-
+    },
     "/api/v1/users": {
       "get": {
         "summary": "Get all users (admin only)",
@@ -514,7 +523,7 @@
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
         "responses": { "204": { "description": "User deleted successfully" } }
       }
-    },  
+    },
     "/api/v1/places": {
       "get": {
         "tags":[
@@ -715,7 +724,6 @@
         }
       }
     },
-    
     "/api/v1/places/{place}": {
       "get": {
         "tags":[
@@ -851,272 +859,273 @@
           "400": { "description": "Bad request" },
           "500": { "description": "Internal server error" }
         }
-        }
-      },
-      
-  "/api/v1/utils/weather": {
-  "get": {
-    "summary": "Get Weather Data",
-    "tags": ["Utils"],
-    "security": [{ "bearerAuth": [] }],
-    "parameters": [
-      {
-        "name": "location",
-        "in": "query",
-        "required": false,
-        "description": "Location to get weather data for",
-        "schema": {
-          "type": "string",
-          "example": "Cairo"
-        }
       }
-    ],
-    "responses": {
-      "200": {
-        "description": "Weather data retrieved successfully",
-        "content": {
-          "application/json": {
+    },
+    "/api/v1/utils/weather": {
+      "get": {
+        "summary": "Get Weather Data",
+        "tags": ["Utils"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "description": "Location to get weather data for",
             "schema": {
-              "type": "object",
-              "properties": {
-                "temperature": {
-                  "type": "number",
-                  "example": 28.5
-                },
-                "humidity": {
-                  "type": "number",
-                  "example": 65
-                },
-                "windSpeed": {
-                  "type": "number",
-                  "example": 12.5
-                },
-                "description": {
-                  "type": "string",
-                  "example": "Sunny"
-                }
-              }
+              "type": "string",
+              "example": "Cairo"
             }
           }
-        }
-      },
-      "401": {
-        "description": "Unauthorized - User must be logged in"
-      },
-      "500": {
-        "description": "Internal Server Error"
-      }
-    }
-  }
-},
-"/api/v1/utils/emergency": {
-  "get": {
-    "summary": "Get Emergency List",
-    "tags": ["Utils"],
-    "security": [
-      {
-        "bearerAuth": []
-      }
-    ],
-    "description": "Fetches a list of all emergency records from the database.",
-    "responses": {
-      "200": {
-        "description": "Successfully fetched the emergency list.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "success"
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Emergency list fetched successfully"
-                },
-                "data": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/emergcy"
+        ],
+        "responses": {
+          "200": {
+            "description": "Weather data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "temperature": {
+                      "type": "number",
+                      "example": 28.5
+                    },
+                    "humidity": {
+                      "type": "number",
+                      "example": 65
+                    },
+                    "windSpeed": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Sunny"
+                    }
                   }
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized - User must be logged in"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
-      },
-      "404": {
-        "description": "No emergency records found.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "error": {
-                  "type": "string",
-                  "example": "No emergency found"
+      }
+    },
+    "/api/v1/utils/emergency": {
+      "get": {
+        "summary": "Get Emergency List",
+        "tags": ["Utils"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "Fetches a list of all emergency records from the database.",
+        "responses": {
+          "200": {
+            "description": "Successfully fetched the emergency list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Emergency list fetched successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/emergcy"
+                      }
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      },
-      "500": {
-        "description": "Internal Server Error"
-      }
-    }
-  }
-},
-"/api/v1/places/recommendedplaces/longitude/{longitude}/latitude/{latitude}": {
-  "get": {
-    "summary": "Find places by coordinates",
-    "tags": ["Places"],
-    "description": "Fetches places near the provided latitude and longitude.",
-    "parameters": [
-      {
-        "name": "longitude",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "number",
-          "example": 31.2357
-        },
-        "description": "Longitude of the location"
-      },
-      {
-        "name": "latitude",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "number",
-          "example": 30.0444
-        },
-        "description": "Latitude of the location"
-      },
-      {
-        "name": "place",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string",
-          "example": "museum"
-        },
-        "description": "Type of place to search for (e.g., museum, restaurant)"
-      },
-      {
-        "name": "limit",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "integer",
-          "example": 10
-        },
-        "description": "Maximum number of results to return"
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "List of places near the provided coordinates.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Data fetched successfully"
-                },
-                "data": {
+          },
+          "404": {
+            "description": "No emergency records found.",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "fsq_id": {
-                            "type": "string",
-                            "example": "5e130c99098c82000868ea09"
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "دار الكتب المصريه"
-                          },
-                          "categories": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "integer",
-                                  "example": 10027
-                                },
-                                "name": {
-                                  "type": "string",
-                                  "example": "Museum"
-                                },
-                                "icon": {
+                    "error": {
+                      "type": "string",
+                      "example": "No emergency found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/places/recommendedplaces/longitude/{longitude}/latitude/{latitude}": {
+      "get": {
+        "summary": "Find places by coordinates",
+        "tags": ["Places"],
+        "description": "Fetches places near the provided latitude and longitude.",
+        "parameters": [
+          {
+            "name": "longitude",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 31.2357
+            },
+            "description": "Longitude of the location"
+          },
+          {
+            "name": "latitude",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 30.0444
+            },
+            "description": "Latitude of the location"
+          },
+          {
+            "name": "place",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "museum"
+            },
+            "description": "Type of place to search for (e.g., museum, restaurant)"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of places near the provided coordinates.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Data fetched successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "fsq_id": {
+                                "type": "string",
+                                "example": "5e130c99098c82000868ea09"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "دار الكتب المصريه"
+                              },
+                              "categories": {
+                                "type": "array",
+                                "items": {
                                   "type": "object",
                                   "properties": {
-                                    "prefix": {
-                                      "type": "string",
-                                      "example": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/museum_"
+                                    "id": {
+                                      "type": "integer",
+                                      "example": 10027
                                     },
-                                    "suffix": {
+                                    "name": {
                                       "type": "string",
-                                      "example": ".png"
+                                      "example": "Museum"
+                                    },
+                                    "icon": {
+                                      "type": "object",
+                                      "properties": {
+                                        "prefix": {
+                                          "type": "string",
+                                          "example": "https://ss3.4sqi.net/img/categories_v2/arts_entertainment/museum_"
+                                        },
+                                        "suffix": {
+                                          "type": "string",
+                                          "example": ".png"
+                                        }
+                                      }
                                     }
+                                  }
+                                }
+                              },
+                              "distance": {
+                                "type": "integer",
+                                "example": 1580
+                              },
+                              "location": {
+                                "type": "object",
+                                "properties": {
+                                  "country": {
+                                    "type": "string",
+                                    "example": "EG"
+                                  },
+                                  "formatted_address": {
+                                    "type": "string",
+                                    "example": "Rahbet Abdin, القاهرة"
                                   }
                                 }
                               }
                             }
-                          },
-                          "distance": {
-                            "type": "integer",
-                            "example": 1580
-                          },
-                          "location": {
-                            "type": "object",
-                            "properties": {
-                              "country": {
-                                "type": "string",
-                                "example": "EG"
-                              },
-                              "formatted_address": {
-                                "type": "string",
-                                "example": "Rahbet Abdin, القاهرة"
-                              }
-                            }
                           }
-                        }
-                      }
-                    },
-                    "context": {
-                      "type": "object",
-                      "properties": {
-                        "geo_bounds": {
+                        },
+                        "context": {
                           "type": "object",
                           "properties": {
-                            "circle": {
+                            "geo_bounds": {
                               "type": "object",
                               "properties": {
-                                "center": {
+                                "circle": {
                                   "type": "object",
                                   "properties": {
-                                    "latitude": {
-                                      "type": "number",
-                                      "example": 30.0444
+                                    "center": {
+                                      "type": "object",
+                                      "properties": {
+                                        "latitude": {
+                                          "type": "number",
+                                          "example": 30.0444
+                                        },
+                                        "longitude": {
+                                          "type": "number",
+                                          "example": 31.2357
+                                        }
+                                      }
                                     },
-                                    "longitude": {
-                                      "type": "number",
-                                      "example": 31.2357
+                                    "radius": {
+                                      "type": "integer",
+                                      "example": 1745
                                     }
                                   }
-                                },
-                                "radius": {
-                                  "type": "integer",
-                                  "example": 1745
                                 }
                               }
                             }
@@ -1128,48 +1137,175 @@
                 }
               }
             }
-          }
-        }
-      },
-      "400": {
-        "description": "Bad request. Missing latitude or longitude.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "You must provide latitude and longitude"
+          },
+          "400": {
+            "description": "Bad request. Missing latitude or longitude.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "You must provide latitude and longitude"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      },
-      "404": {
-        "description": "No places found near the provided location.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "No places found near the provided location"
+          },
+          "404": {
+            "description": "No places found near the provided location.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No places found near the provided location"
+                    }
+                  }
                 }
               }
             }
           }
         }
       }
+    },
+    "/api/v1/posts": {
+      "post": {
+        "tags": ["Post"],
+        "summary": "Create a new post",
+        "description": "Creates a new post with up to 5 images.",
+        "security": [{ "bearerAuth": [] }],
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "images",
+            "in": "formData",
+            "description": "Images to upload (max 5)",
+            "required": false,
+            "type": "array",
+            "items": { "type": "file" }
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "description": "Post title",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "in": "formData",
+            "description": "Post content",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": { "description": "Post created successfully" },
+          "400": { "description": "Bad request" }
+        }
+      }
+    },
+    "/api/v1/posts/{id}": {
+      "patch": {
+        "tags": ["Post"],
+        "summary": "Update a post",
+        "description": "Updates a post by ID.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Post updated successfully" },
+          "400": { "description": "Bad request" }
+        }
+      },
+      "get": {
+        "tags": ["Post"],
+        "summary": "Get all posts",
+        "description": "Retrieves all posts (or a specific post by ID if implemented that way).",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Posts retrieved successfully" },
+          "404": { "description": "Post not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Post"],
+        "summary": "Delete a post",
+        "description": "Deletes a post by ID.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Post deleted successfully" },
+          "404": { "description": "Post not found" }
+        }
+      }
+    },
+    "/api/v1/chatbot/ask": {
+      "post": {
+        "tags": ["Chatbot"],
+        "summary": "Ask the chatbot a question",
+        "description": "Send a question to the AI chatbot and get an answer.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "question": { "type": "string", "example": "ما هي أشهر الأماكن السياحية في القاهرة؟" }
+                },
+                "required": ["question"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chatbot answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "answer": { "type": "string", "example": "من أشهر الأماكن السياحية في القاهرة: الأهرامات، المتحف المصري..." }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad request" }
+        }
+      }
     }
-  }
-}
-
   },
   "definitions": {
-    "user": {
+    "User": {
       "required": [
         "name",
         "email",
@@ -1202,7 +1338,7 @@
         }
       }
     },
-    "emergcy":{
+    "Emergcy":{
       "properties": {
         "serviceName":{
           "type":"string",
@@ -1247,6 +1383,42 @@
               "example":[27.18,30.07]
             }
           }
+        }
+      }
+    },
+    "Post": {
+      "required": ["title", "content", "user"],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "65a1234567890abcd"
+        },
+        "title": {
+          "type": "string",
+          "example": "رحلتي إلى الأهرامات"
+        },
+        "content": {
+          "type": "string",
+          "example": "كانت تجربة رائعة في زيارة الأهرامات مع الأصدقاء."
+        },
+        "images": {
+          "type": "array",
+          "items": { "type": "string", "example": "https://example.com/image1.jpg" },
+          "example": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
+        },
+        "user": {
+          "type": "string",
+          "example": "64a1234567890abcd"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2024-06-01T12:00:00Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2024-06-01T12:30:00Z"
         }
       }
     }

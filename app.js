@@ -3,16 +3,18 @@ const authRoutes = require("./routes/userRouter");
 const placesRoutes = require("./routes/placesRouter");
 const userRoutes = require("./routes/userRouter");
 const weatherRoutes = require("./routes/utilsRoutes");
+const postRoutes = require('./routes/postRouter');
+const chatbotRoutes = require('./routes/chatbotRouter');
 const app = express();
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const cookieParser = require("cookie-parser");
 const session = require('express-session'); // استيراد express-session
-const AppError = require("./utils/err");
 const globalErrorHandler = require('./controller/errorController');
 const morgan = require("morgan");
 const passport = require("./services/passport");
+
 app.use(cookieParser());
 app.use(
   session({
@@ -34,11 +36,14 @@ app.use((req, res, next) => {
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000", // أضف المصدر الخاص بك هنا
+    origin: "*", // أضف المصدر الخاص بك هنا
   })
 );
 
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/chatbot", chatbotRoutes);
+
 app.use("/api/v1/places", placesRoutes);
 app.use('/api/v1/utils',weatherRoutes);
 app.use("/auth", authRoutes);

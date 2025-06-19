@@ -18,41 +18,30 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     default: "user",
-    enum: ["user","admin"],
+    enum: ["user", "admin"],
   },
-  active: { type: String, default:true },
+  active: { type: String, default: true },
   password: {
     type: String,
     required: [true, "Please provide a password"],
     minlength: 8,
     select: false,
   },
-  confirmPassword: {
-    type: String,
-    required: [true, "Please confirm your password"],
-    validate: {
-      validator: function (value) {
-        return value === this.password;
-      },
-      message: "Confirm password must match the original password.",
+
+  facebookId: String,
+  googleId: String,
+  provider: String,
+  posts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
-  },
-  facebookId:String,
-  googleId:String,
-  provider:String,
-  
+  ],
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
-userSchema.pre("save", async function (next) {
-  //only run this function if password was actually modified
-  if (!this.isModified("password")) return next();
-  //كده انا عملتها async كان قدامي اعملها sync بس مش هينفع عشان هتقفل الايفنت لوب
-  this.password = await bcrypt.hash(this.password, 12);
 
-  //الmiddleware بتحصل لما ادخل الداتا يعني معايا الداتا بس لسه مارحتش للداتا بيز فانا بتاكد انه مطابق للباسورد وبعد كده بصفره ومرضيتش امسحه لاني خليته required
-  this.confirmPassword = undefined;
-  next();
-});
 userSchema.pre(/^find/,function(next){
     this.find({active:{$ne:false}});
     next();
