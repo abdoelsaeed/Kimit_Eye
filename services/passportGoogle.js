@@ -11,10 +11,15 @@ passport.use(
     },
     async function (request, accessToken, refreshToken, profile, done) {
         try {
-          let user = await User.findOne({
-            googleId: profile.id,
-            facebookId: { $exists: false },
-          });
+          let user = await User.findOne({ googleId: profile.id });
+          if (!user && profile.emails && profile.emails[0].value) {
+            // ابحث عن مستخدم بنفس الإيميل
+            user = await User.findOne({ email: profile.emails[0].value });
+            if (user) {
+              user.googleId = profile.id;
+              await user.save({ validateBeforeSave: false });
+            }
+          }
           if (!user) {
             user = await new User({
                 googleId: profile.id,
