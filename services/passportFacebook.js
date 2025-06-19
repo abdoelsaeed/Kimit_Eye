@@ -7,21 +7,20 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET,
-      callbackURL:
-        "https://kimit-fgklht0kl-abdoelsaeeds-projects.vercel.app/auth/facebook/callback",
+      callbackURL: "http://localhost:3000/auth/facebook/callback",
       profileFields: ["id", "email", "name", "picture"],
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ facebookId: profile.id });
-        if (!user && profile.emails && profile.emails[0].value) {
-          // ابحث عن مستخدم بنفس الإيميل
-          user = await User.findOne({ email: profile.emails[0].value });
-          if (user) {
-            user.facebookId = profile.id;
-            await user.save({ validateBeforeSave: false });
+          let user = await User.findOne({ facebookId: profile.id });
+          if (!user && profile.emails && profile.emails[0].value) {
+            // ابحث عن مستخدم بنفس الإيميل
+            user = await User.findOne({ email: profile.emails[0].value });
+            if (user) {
+              user.facebookId = profile.id;
+              await user.save({ validateBeforeSave: false });
+            }
           }
-        }
         if (!user) {
           user = await new User({
             facebookId: profile.id,
@@ -31,8 +30,9 @@ passport.use(
             provider: profile.provider,
           }).save({ validateBeforeSave: false });
         }
-        return done(null, user);
-      } catch (error) {
+        return done(null,  user)      
+      } 
+      catch (error) {
         return done(error);
       }
     }
