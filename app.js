@@ -5,6 +5,8 @@ const userRoutes = require("./routes/userRouter");
 const weatherRoutes = require("./routes/utilsRoutes");
 const postRoutes = require('./routes/postRouter');
 const chatbotRoutes = require('./routes/chatbotRouter');
+const translateRoutes = require('./routes/translateRouter');
+const hieroglyphRoutes = require('./routes/hieroglyphRouter');
 const app = express();
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
@@ -43,6 +45,8 @@ app.use(
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/chatbot", chatbotRoutes);
+app.use("/api/v1/translate", translateRoutes);
+app.use("/api/v1/hieroglyph", hieroglyphRoutes);
 
 app.use("/api/v1/places", placesRoutes);
 app.use('/api/v1/utils',weatherRoutes);

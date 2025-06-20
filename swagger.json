@@ -23,6 +23,14 @@
     {
       "name": "Chatbot",
       "description": "Ask questions to the AI chatbot"
+    },
+    {
+      "name": "Utils",
+      "description": "Utility endpoints like weather and translation"
+    },
+    {
+      "name": "Hieroglyph",
+      "description": "Operations related to hieroglyphic data"
     }
   ],
   "schemes": [
@@ -1302,6 +1310,165 @@
           "400": { "description": "Bad request" }
         }
       }
+    },
+    "/api/v1/translate": {
+      "post": {
+        "tags": ["Utils"],
+        "summary": "Translate text",
+        "description": "Translates text from a source language to a target language using a free third-party API.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "example": "Hello, world!"
+                  },
+                  "targetLanguage": {
+                    "type": "string",
+                    "description": "The language code to translate to (e.g., 'ar', 'fr').",
+                    "example": "ar"
+                  },
+                  "sourceLanguage": {
+                    "type": "string",
+                    "description": "The language code to translate from (e.g., 'en', 'es'). If omitted, it will be auto-detected.",
+                    "example": "en"
+                  }
+                },
+                "required": ["text", "targetLanguage"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Translation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "result": {
+                      "type": "string",
+                      "example": "أهلاً بالعالم!"
+                    },
+                    "sourceLanguage": {
+                      "type": "string",
+                      "description": "The detected source language code.",
+                      "example": "en"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing required fields.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "text is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An error occurred while processing the translation"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hieroglyph": {
+      "post": {
+        "tags": ["Hieroglyph"],
+        "summary": "Get data for multiple hieroglyph classes",
+        "description": "Receives an array of detected class names and returns their corresponding information from the database.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "detectedClasses": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": ["dog", "snake", "feather"]
+                  }
+                },
+                "required": ["detectedClasses"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "results": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "documents": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/definitions/Hieroglyph"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The request body is missing or malformed."
+          },
+          "404": {
+            "description": "Not Found - No data found for the provided classes."
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1419,6 +1586,27 @@
           "type": "string",
           "format": "date-time",
           "example": "2024-06-01T12:30:00Z"
+        }
+      }
+    },
+    "Hieroglyph": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "65b123..."
+        },
+        "className": {
+          "type": "string",
+          "example": "dog"
+        },
+        "information": {
+          "type": "string",
+          "example": "Symbolizes loyalty, protection, or Anubis."
+        },
+        "category": {
+          "type": "string",
+          "example": "Hieroglyph"
         }
       }
     }

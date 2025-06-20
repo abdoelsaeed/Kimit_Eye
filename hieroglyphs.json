@@ -1,0 +1,772 @@
+[
+  {
+    "className": "2_humps",
+    "information": "Two HumpsRepresents waves, hills, or repetitive motion.",
+    "category": null
+  },
+  {
+    "className": "2_legs",
+    "information": "Two LegsSymbolizes walking, movement, or travel.",
+    "category": null
+  },
+  {
+    "className": "2_lines_slanted",
+    "information": "Two Slanted LinesRepresents parallelism, balance, or duality.",
+    "category": null
+  },
+  {
+    "className": "2_vertical_lines",
+    "information": "Two Vertical LinesSymbolizes separation, doors, or division.",
+    "category": null
+  },
+  {
+    "className": "3_dots",
+    "information": "Three DotsRepresents pluralization or emphasis.",
+    "category": null
+  },
+  {
+    "className": "3_flowers",
+    "information": "Three FlowersSymbolizes growth, beauty, or nature.",
+    "category": null
+  },
+  {
+    "className": "3_humps",
+    "information": "Three HumpsRepresents waves or continuous motion.",
+    "category": null
+  },
+  {
+    "className": "3_pots",
+    "information": "Three PotsSymbolizes storage, abundance, or offerings.",
+    "category": null
+  },
+  {
+    "className": "3_vertical_lines",
+    "information": "Three Vertical LinesRepresents stability, barriers, or count of three.",
+    "category": null
+  },
+  {
+    "className": "3_water",
+    "information": "Three Water SymbolsSymbolizes water, fluidity, or nourishment.",
+    "category": null
+  },
+  {
+    "className": "a",
+    "information": "Letter ARepresents the sound 'A' in hieroglyphs.",
+    "category": null
+  },
+  {
+    "className": "amulet",
+    "information": "Protective AmuletSymbolizes protection, magic, or spiritual power.",
+    "category": null
+  },
+  {
+    "className": "amulet2",
+    "information": "Second Amulet TypeAnother variation of a protective charm.",
+    "category": null
+  },
+  {
+    "className": "ank",
+    "information": "AnkhSymbol of life and immortality.",
+    "category": null
+  },
+  {
+    "className": "ank_staff",
+    "information": "Ankh with StaffRepresents divine authority and eternal life.",
+    "category": null
+  },
+  {
+    "className": "arm",
+    "information": "ArmSymbolizes strength, work, or action.",
+    "category": null
+  },
+  {
+    "className": "arm2",
+    "information": "Bent ArmRepresents physical effort or giving.",
+    "category": null
+  },
+  {
+    "className": "arm_holding_triangle",
+    "information": "Arm Holding a TriangleSymbolizes construction or precision.",
+    "category": null
+  },
+  {
+    "className": "arms_down",
+    "information": "Arms Pointing DownRepresents submission or grounding.",
+    "category": null
+  },
+  {
+    "className": "arms_hump",
+    "information": "Arms Forming a HumpSymbolizes embracing or support.",
+    "category": null
+  },
+  {
+    "className": "arms_up",
+    "information": "Arms RaisedRepresents praise, worship, or joy.",
+    "category": null
+  },
+  {
+    "className": "banner",
+    "information": "BannerSymbol of a standard or representation of an entity.",
+    "category": null
+  },
+  {
+    "className": "beetle",
+    "information": "Scarab BeetleRepresents transformation and rebirth.",
+    "category": null
+  },
+  {
+    "className": "beltbird",
+    "information": "Bird with a BeltSymbolizes protection or a ceremonial role.",
+    "category": null
+  },
+  {
+    "className": "bird_head",
+    "information": "Bird's HeadRepresents intelligence or a deity.",
+    "category": null
+  },
+  {
+    "className": "boat",
+    "information": "Simple BoatSymbolizes travel, trade, or the afterlife journey.",
+    "category": null
+  },
+  {
+    "className": "boat_2",
+    "information": "Large BoatRepresents a grander voyage or divine transport.",
+    "category": null
+  },
+  {
+    "className": "bow",
+    "information": "BowSymbolizes warfare, hunting, or strength.",
+    "category": null
+  },
+  {
+    "className": "bowtie",
+    "information": "Bowtie ShapeRepresents elegance, formality, or unity.",
+    "category": null
+  },
+  {
+    "className": "box",
+    "information": "Box or ContainerSymbolizes storage, secrets, or offerings.",
+    "category": null
+  },
+  {
+    "className": "branch",
+    "information": "Tree BranchRepresents growth, nature, or lineage.",
+    "category": null
+  },
+  {
+    "className": "brush",
+    "information": "BrushSymbolizes writing, creativity, or artistry.",
+    "category": null
+  },
+  {
+    "className": "bug",
+    "information": "InsectRepresents small creatures, persistence, or pests.",
+    "category": null
+  },
+  {
+    "className": "cancer",
+    "information": "Cancer Zodiac SymbolRepresents cycles, renewal, or astrology.",
+    "category": null
+  },
+  {
+    "className": "cellochair",
+    "information": "Chair Shaped Like a CelloSymbolizes music, relaxation, or status.",
+    "category": null
+  },
+  {
+    "className": "chair_plus_swirl",
+    "information": "Chair with a SwirlRepresents creativity or distinction.",
+    "category": null
+  },
+  {
+    "className": "circle",
+    "information": "Simple CircleSymbolizes eternity, unity, or completeness.",
+    "category": null
+  },
+  {
+    "className": "circle_with_legs",
+    "information": "Circle with LegsRepresents movement or an entity.",
+    "category": null
+  },
+  {
+    "className": "circle_with_triangles",
+    "information": "Circle with TrianglesSymbolizes protection, decoration, or energy.",
+    "category": null
+  },
+  {
+    "className": "circle_with_whips",
+    "information": "Circle with Whip ShapesRepresents control or discipline.",
+    "category": null
+  },
+  {
+    "className": "claw",
+    "information": "Claw ShapeSymbolizes strength, danger, or grasping.",
+    "category": null
+  },
+  {
+    "className": "club",
+    "information": "Club ShapeRepresents power, force, or a weapon.",
+    "category": null
+  },
+  {
+    "className": "cobra_kai",
+    "information": "Cobra SymbolRepresents danger, power, or royalty.",
+    "category": null
+  },
+  {
+    "className": "comma",
+    "information": "Comma ShapeSymbolizes pause or division.",
+    "category": null
+  },
+  {
+    "className": "container_with_lines",
+    "information": "Lined ContainerRepresents storage, boundaries, or elements.",
+    "category": null
+  },
+  {
+    "className": "cooking_pot",
+    "information": "Cooking PotSymbolizes nourishment and sustenance.",
+    "category": null
+  },
+  {
+    "className": "cow",
+    "information": "CowRepresents fertility, motherhood, and Hathor.",
+    "category": null
+  },
+  {
+    "className": "crooked_line",
+    "information": "Crooked LineSymbolizes instability or movement.",
+    "category": null
+  },
+  {
+    "className": "crosscross2cup",
+    "information": "Crossed Cup ShapeRepresents offerings, balance, or contrast.",
+    "category": null
+  },
+  {
+    "className": "cup_with_legs",
+    "information": "Cup with LegsSymbolizes mobility or a ceremonial cup.",
+    "category": null
+  },
+  {
+    "className": "curved_snake",
+    "information": "Curved SnakeRepresents serpents, protection, or mystery.",
+    "category": null
+  },
+  {
+    "className": "curvy_thing",
+    "information": "Curved ShapeSymbolizes fluidity or artistic design.",
+    "category": null
+  },
+  {
+    "className": "curvy_thing2",
+    "information": "Second Curvy ShapeRepresents movement or decorative elements.",
+    "category": null
+  },
+  {
+    "className": "dog",
+    "information": "DogSymbolizes loyalty, protection, or Anubis.",
+    "category": null
+  },
+  {
+    "className": "doghead_staff",
+    "information": "Staff with a Dog HeadRepresents guidance, hunting, or strength.",
+    "category": null
+  },
+  {
+    "className": "downward_c",
+    "information": "Downward 'C' ShapeSymbolizes a crescent or shelter.",
+    "category": null
+  },
+  {
+    "className": "downward_g",
+    "information": "Downward 'G' ShapeRepresents curling or enclosing.",
+    "category": null
+  },
+  {
+    "className": "dream_catcher",
+    "information": "Dream CatcherSymbolizes protection from bad omens.",
+    "category": null
+  },
+  {
+    "className": "dress_tie",
+    "information": "Dress with a TieRepresents fashion, nobility, or status.",
+    "category": null
+  },
+  {
+    "className": "drop",
+    "information": "Drop ShapeSymbolizes liquid, water, or tears.",
+    "category": null
+  },
+  {
+    "className": "ear",
+    "information": "EarRepresents hearing, listening, or perception.",
+    "category": null
+  },
+  {
+    "className": "egg",
+    "information": "EggSymbolizes creation, potential, or fertility.",
+    "category": null
+  },
+  {
+    "className": "emptying_pot",
+    "information": "Emptying PotRepresents an offering, flow, or giving away.",
+    "category": null
+  },
+  {
+    "className": "eyeeye2",
+    "information": "Two EyesSymbolizes vision, awareness, or watching.",
+    "category": null
+  },
+  {
+    "className": "fancy_table",
+    "information": "Ornate TableRepresents status, dining, or offerings.",
+    "category": null
+  },
+  {
+    "className": "fathead_plant",
+    "information": "Plant with a Large HeadSymbolizes fertility, growth, or harvest.",
+    "category": null
+  },
+  {
+    "className": "feather",
+    "information": "Single FeatherRepresents truth, Maat, or lightness.",
+    "category": null
+  },
+  {
+    "className": "feather_2",
+    "information": "Second Feather TypeAnother representation of truth or air.",
+    "category": null
+  },
+  {
+    "className": "feather_moon_hook",
+    "information": "Feather with Moon HookRepresents divine insight or duality.",
+    "category": null
+  },
+  {
+    "className": "feather_tie",
+    "information": "Feather Tied with RopeSymbolizes stability and lightness.",
+    "category": null
+  },
+  {
+    "className": "feather_with_legs",
+    "information": "Feather with LegsRepresents movement and wisdom.",
+    "category": null
+  },
+  {
+    "className": "fish",
+    "information": "FishSymbolizes water, prosperity, and the Nile.",
+    "category": null
+  },
+  {
+    "className": "fish_with_legs",
+    "information": "Fish with LegsRepresents transformation or movement.",
+    "category": null
+  },
+  {
+    "className": "flag",
+    "information": "Flag SymbolRepresents territory, rule, or identity.",
+    "category": null
+  },
+  {
+    "className": "flat_spiral",
+    "information": "Flat SpiralSymbolizes cycles, movement, or continuity.",
+    "category": null
+  },
+  {
+    "className": "flathead_staff",
+    "information": "Staff with Flat HeadRepresents leadership or stability.",
+    "category": null
+  },
+  {
+    "className": "galea",
+    "information": "Helmet (Galea)Symbolizes protection and warfare.",
+    "category": null
+  },
+  {
+    "className": "garden",
+    "information": "Garden SymbolRepresents cultivation, abundance, or nature.",
+    "category": null
+  },
+  {
+    "className": "goat_leg",
+    "information": "Goat's LegRepresents stubbornness or agility.",
+    "category": null
+  },
+  {
+    "className": "grain",
+    "information": "Grain SymbolRepresents sustenance, harvest, or prosperity.",
+    "category": null
+  },
+  {
+    "className": "grain2",
+    "information": "Second Grain SymbolRepresents additional agricultural significance.",
+    "category": null
+  },
+  {
+    "className": "grain_arm",
+    "information": "Grain with ArmSymbolizes farming or manual labor.",
+    "category": null
+  },
+  {
+    "className": "grid",
+    "information": "Grid PatternRepresents order, planning, or measurement.",
+    "category": null
+  },
+  {
+    "className": "hair",
+    "information": "Hair SymbolRepresents growth, identity, or adornment.",
+    "category": null
+  },
+  {
+    "className": "half_moon_bot",
+    "information": "Bottom Half-MoonSymbolizes lunar cycles or balance.",
+    "category": null
+  },
+  {
+    "className": "half_moon_top",
+    "information": "Top Half-MoonRepresents celestial influence or time.",
+    "category": null
+  },
+  {
+    "className": "handhatheadhookhook2",
+    "information": "Composite Hand, Hat, Head, HookRepresents complex actions or accessories.",
+    "category": null
+  },
+  {
+    "className": "horns",
+    "information": "HornsSymbolizes power, aggression, or divine presence.",
+    "category": null
+  },
+  {
+    "className": "hump",
+    "information": "Hump ShapeRepresents curved formations or motion.",
+    "category": null
+  },
+  {
+    "className": "knifelace",
+    "information": "Knife and LaceSymbolizes precision or craftsmanship.",
+    "category": null
+  },
+  {
+    "className": "leaky_pot",
+    "information": "Leaking PotRepresents loss, flow, or offerings.",
+    "category": null
+  },
+  {
+    "className": "leg",
+    "information": "LegSymbolizes movement, action, or journey.",
+    "category": null
+  },
+  {
+    "className": "leg_plus_arm",
+    "information": "Leg with ArmRepresents coordination or balance.",
+    "category": null
+  },
+  {
+    "className": "leg_plus_leaky_pot",
+    "information": "Leg with Leaking PotSymbolizes a difficult journey or sacrifice.",
+    "category": null
+  },
+  {
+    "className": "lions_head",
+    "information": "Lion's HeadRepresents strength, royalty, or protection.",
+    "category": null
+  },
+  {
+    "className": "m_staff",
+    "information": "M-Shaped StaffSymbolizes authority or power.",
+    "category": null
+  },
+  {
+    "className": "mace",
+    "information": "Mace WeaponRepresents force, war, or punishment.",
+    "category": null
+  },
+  {
+    "className": "mammal",
+    "information": "Mammal SymbolRepresents wildlife, fertility, or nature.",
+    "category": null
+  },
+  {
+    "className": "mansion",
+    "information": "Mansion SymbolRepresents wealth, shelter, or grandeur.",
+    "category": null
+  },
+  {
+    "className": "mer",
+    "information": "Water Ripple (Mer)Symbolizes water, flow, or the Nile.",
+    "category": null
+  },
+  {
+    "className": "mouthmouth2",
+    "information": "Two Mouth SymbolsRepresents speech, communication, or expression.",
+    "category": null
+  },
+  {
+    "className": "mustache",
+    "information": "Mustache SymbolRepresents age, wisdom, or masculinity.",
+    "category": null
+  },
+  {
+    "className": "n",
+    "information": "Letter 'N'Represents the phonetic 'N' sound.",
+    "category": null
+  },
+  {
+    "className": "nestperson",
+    "information": "Person in a NestSymbolizes protection or community.",
+    "category": null
+  },
+  {
+    "className": "phallus",
+    "information": "Phallus SymbolRepresents fertility, masculinity, or creation.",
+    "category": null
+  },
+  {
+    "className": "pillar",
+    "information": "PillarSymbolizes strength, support, or stability.",
+    "category": null
+  },
+  {
+    "className": "plateplate2",
+    "information": "Two Plate SymbolsRepresents dining, offerings, or sustenance.",
+    "category": null
+  },
+  {
+    "className": "podium",
+    "information": "PodiumSymbolizes authority, speech, or presentation.",
+    "category": null
+  },
+  {
+    "className": "pot",
+    "information": "Pot SymbolRepresents storage, offerings, or nourishment.",
+    "category": null
+  },
+  {
+    "className": "pot2",
+    "information": "Second Pot TypeVariation of storage or cooking vessels.",
+    "category": null
+  },
+  {
+    "className": "pot_with_horn",
+    "information": "Pot with HornSymbolizes abundance or ceremonial use.",
+    "category": null
+  },
+  {
+    "className": "rabbit",
+    "information": "RabbitRepresents speed, fertility, or cleverness.",
+    "category": null
+  },
+  {
+    "className": "rectangular_box",
+    "information": "Rectangular BoxSymbolizes containment, stability, or structure.",
+    "category": null
+  },
+  {
+    "className": "rounded_box",
+    "information": "Rounded BoxRepresents soft containment or fluidity.",
+    "category": null
+  },
+  {
+    "className": "sail",
+    "information": "Sail SymbolRepresents navigation, travel, or wind.",
+    "category": null
+  },
+  {
+    "className": "scale",
+    "information": "Scale SymbolRepresents balance, justice, or measurement.",
+    "category": null
+  },
+  {
+    "className": "scythe",
+    "information": "Scythe SymbolRepresents harvest, death, or change.",
+    "category": null
+  },
+  {
+    "className": "slanted_flowers",
+    "information": "Slanted FlowersSymbolizes nature, beauty, or movement.",
+    "category": null
+  },
+  {
+    "className": "sled",
+    "information": "Sled SymbolRepresents transport, movement, or labor.",
+    "category": null
+  },
+  {
+    "className": "snail",
+    "information": "Snail SymbolRepresents slowness, patience, or protection.",
+    "category": null
+  },
+  {
+    "className": "snake",
+    "information": "SnakeSymbolizes protection, danger, or transformation.",
+    "category": null
+  },
+  {
+    "className": "snake_flower",
+    "information": "Snake with FlowerRepresents duality of danger and beauty.",
+    "category": null
+  },
+  {
+    "className": "snake_moon_line",
+    "information": "Snake and Moon LineSymbolizes celestial movement or cycles.",
+    "category": null
+  },
+  {
+    "className": "spear",
+    "information": "SpearRepresents war, hunting, or defense.",
+    "category": null
+  },
+  {
+    "className": "spiral",
+    "information": "Spiral ShapeSymbolizes cycles, eternity, or motion.",
+    "category": null
+  },
+  {
+    "className": "sporkhead",
+    "information": "Spork-Shaped HeadRepresents dual-functionality or adaptability.",
+    "category": null
+  },
+  {
+    "className": "stacked_lines",
+    "information": "Stacked LinesRepresents layers, structure, or accumulation.",
+    "category": null
+  },
+  {
+    "className": "stairsstar",
+    "information": "Stairs and Star SymbolRepresents ascension, guidance, or celestial connection.",
+    "category": null
+  },
+  {
+    "className": "stop_light",
+    "information": "Stoplight SymbolRepresents signaling, control, or caution.",
+    "category": null
+  },
+  {
+    "className": "sunrise",
+    "information": "Sunrise SymbolSymbolizes new beginnings, hope, or light.",
+    "category": null
+  },
+  {
+    "className": "swab",
+    "information": "Swab SymbolRepresents cleaning, purification, or medicine.",
+    "category": null
+  },
+  {
+    "className": "tabletable2",
+    "information": "Two Table SymbolsRepresents dining, structure, or offering.",
+    "category": null
+  },
+  {
+    "className": "table_hook",
+    "information": "Table with HookSymbolizes attachment or security.",
+    "category": null
+  },
+  {
+    "className": "table_plus_dots",
+    "information": "Table with DotsRepresents offerings or counting.",
+    "category": null
+  },
+  {
+    "className": "table_plus_legs",
+    "information": "Table with LegsRepresents stability or support.",
+    "category": null
+  },
+  {
+    "className": "tea_cup",
+    "information": "Tea CupSymbolizes hospitality, rest, or relaxation.",
+    "category": null
+  },
+  {
+    "className": "tea_cup_top",
+    "information": "Tea Cup Top ViewRepresents drinking or a vessel.",
+    "category": null
+  },
+  {
+    "className": "teepee",
+    "information": "Teepee SymbolSymbolizes shelter, nomadic life, or tradition.",
+    "category": null
+  },
+  {
+    "className": "tietowertriangle",
+    "information": "Tie, Tower, Triangle CompositeRepresents unity, height, or geometric significance.",
+    "category": null
+  },
+  {
+    "className": "trojan_horse",
+    "information": "Trojan HorseSymbolizes deception, strategy, or war.",
+    "category": null
+  },
+  {
+    "className": "tuning_fork",
+    "information": "Tuning ForkRepresents sound, vibration, or music.",
+    "category": null
+  },
+  {
+    "className": "tuning_fork2",
+    "information": "Second Tuning ForkVariation of resonance or sound.",
+    "category": null
+  },
+  {
+    "className": "twist",
+    "information": "Twist ShapeRepresents motion, change, or flexibility.",
+    "category": null
+  },
+  {
+    "className": "twist2",
+    "information": "Second Twist TypeRepresents movement or adaptability.",
+    "category": null
+  },
+  {
+    "className": "twist_crown",
+    "information": "Crown with TwistSymbolizes regal authority with dynamism.",
+    "category": null
+  },
+  {
+    "className": "twist_mouth",
+    "information": "Twisted MouthRepresents speech, distortion, or communication.",
+    "category": null
+  },
+  {
+    "className": "u",
+    "information": "Letter 'U'Represents the phonetic 'U' sound.",
+    "category": null
+  },
+  {
+    "className": "u_crown",
+    "information": "U-Shaped CrownSymbolizes royalty, divine power, or honor.",
+    "category": null
+  },
+  {
+    "className": "u_with_legs",
+    "information": "U Shape with LegsRepresents movement or transition.",
+    "category": null
+  },
+  {
+    "className": "upside_down_cancer",
+    "information": "Upside-Down Cancer SymbolRepresents reversal, astrology, or cycles.",
+    "category": null
+  },
+  {
+    "className": "vomit",
+    "information": "Vomiting SymbolSymbolizes sickness, rejection, or excess.",
+    "category": null
+  },
+  {
+    "className": "waterwhip",
+    "information": "Water WhipRepresents fluid control, adaptability, or flow.",
+    "category": null
+  },
+  {
+    "className": "whip2",
+    "information": "Second Whip TypeRepresents force, punishment, or discipline.",
+    "category": null
+  },
+  {
+    "className": "wing",
+    "information": "Wing SymbolRepresents freedom, speed, or flight.",
+    "category": null
+  }
+]
