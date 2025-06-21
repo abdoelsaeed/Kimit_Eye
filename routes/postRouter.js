@@ -9,7 +9,8 @@ router.post(
     upload.array("images", 5),
     postController.createPost
 );
+router.get("/", authController.protect, postController.getAllposts);
 router.patch('/:id', authController.protect, postController.updatePost);
-router.get("/:id", authController.protect, postController.getAllposts);
+router.get("/:id", authController.protect, postController.getAllpostsUser);
 router.delete("/:id", authController.protect, postController.deletePost);
 module.exports = router;

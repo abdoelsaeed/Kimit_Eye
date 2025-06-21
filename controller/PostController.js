@@ -49,10 +49,25 @@ exports.updatePost = catchAsync(async (req, res, next) => {
     },
   });
 });
-exports.getAllposts = catchAsync(async (req, res, next) => {
+exports.getAllpostsUser = catchAsync(async (req, res, next) => {
   const userId = req.params.id;
 
   const posts = await Post.find({ user: userId }).populate(
+    "user",
+    "name photo "
+  );
+  if (posts.length === 0) return next(new AppError("No posts found", 404));
+  res.status(200).json({
+    status: "success",
+    data: {
+      posts,
+    },
+  });
+});
+exports.getAllposts = catchAsync(async (req, res, next) => {
+  const userId = req.params.id;
+
+  const posts = await Post.find().populate(
     "user",
     "name photo "
   );
